@@ -1,0 +1,268 @@
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a {
+    color: #0077cc;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+
+/* Custom CSS for a more attractive appearance */
+body {
+    background-color: #e0f2f7; /* Soft light blue background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.elegant-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Deeper shadow for elegance */
+}
+
+.form-group-box {
+    max-width: 450px; /* Max width for input groups */
+    width: 100%; /* Ensure it takes full width within its column */
+}
+
+.form-label {
+    font-size: 0.95em;
+    margin-bottom: 0.3em;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.6em 0.75em;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    }
+
+.custom-button {
+    background-image: linear-gradient(to right, #4CAF50 0%, #66bb6a 51%, #4CAF50 100%);
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Softer blue shadow */
+    border-radius: 30px; /* Pill-shaped button */
+    border: none;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+    .custom-button:hover {
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-2px); /* Slight lift on hover */
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    }
+
+.elegant-hr {
+    border-top: 2px dashed #a0d4e7; /* Dotted line for separation */
+    width: 60%; /* Shorter horizontal rule */
+    margin: 3rem auto; /* Centered */
+}
+
+.result-alert {
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
+.path-steps-badge {
+    font-size: 1em;
+    padding: 0.5em 0.8em;
+    border-radius: 15px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.grid-container {
+    display: grid;
+    grid-gap: 4px; /* Slightly larger gap */
+    background-color: #f7fcff; /* Very light blue background */
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.15); /* More pronounced inner shadow */
+    padding: 12px;
+    width: fit-content;
+    border: 1px solid #d4eaf7; /* Soft border */
+}
+
+.grid-cell {
+    width: 50px; /* Slightly larger cells */
+    height: 50px;
+    border: 1px solid #b3e0ff; /* Lighter, soft blue border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em; /* Larger icon size */
+    font-weight: bold;
+    border-radius: 10px; /* More rounded corners */
+    background-color: #e6f7ff; /* Softest blue background */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08); /* More noticeable shadow */
+}
+
+    .grid-cell:hover {
+        transform: translateY(-3px); /* More pronounced lift on hover */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Stronger shadow on hover */
+        background-color: #d0efff; /* Slightly darker on hover */
+    }
+
+.player-cell {
+    background-color: #c9f7c9; /* Softer green */
+    border-color: #88d488;
+    animation: pulsePlayer 1.8s infinite ease-in-out; /* Slower, smoother pulse */
+}
+
+.gold-cell {
+    background-color: #ffe6a5; /* Softer gold */
+    border-color: #ffda6a;
+    animation: bounceGold 1.2s infinite alternate ease-in-out; /* Slower, smoother bounce */
+}
+
+.obstacle-cell {
+    background-color: #6c757d; /* Deeper gray */
+    border-color: #495057;
+    color: white;
+    font-size: 1.8em; /* Slightly larger obstacle icon */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.path-cell {
+    background-color: #a7d9f7; /* A more vibrant sky blue */
+    border-color: #64b5f6;
+    font-size: 2.2em; /* Larger path dot */
+    color: #1a1a1a; /* Darker dot for contrast */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.path-display {
+    background-color: #f0f8ff; /* Lighter background for path display */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* More space between elements */
+}
+
+.path-coord {
+    font-size: 1em;
+    padding: 9px 15px;
+    border-radius: 25px; /* More rounded */
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.path-arrow {
+    font-size: 1.5em; /* Larger arrow */
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Keyframe Animations */
+@keyframes pulsePlayer {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.03);
+        opacity: 0.95;
+    }
+    /* Less drastic pulse */
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes bounceGold {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-7px);
+    }
+    /* Slightly higher bounce */
+}
