@@ -3,7 +3,7 @@
 An interactive web-based simulator developed with **ASP.NET Core Razor Pages** to visualize and compare classical AI search algorithms in a 2D grid environment.
 
 ### 📅 Project Timeline & Context
-- **Developed**: Summer 2025 (Mordad & Shahrivar 1403)
+- **Developed**: Summer 2025 (Mordad & Shahrivar 1404)
 - **Status**: Completed and submitted as a final project.
 - **Course**: Artificial Intelligence / Computer Vision
 - **Supervised by**: Dr. Basiri
