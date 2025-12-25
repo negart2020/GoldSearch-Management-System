@@ -30,4 +30,5 @@ According to the project documentation, the performance of these algorithms was 
 
 ### 🖼 Project Demo
 *(After uploading your screenshot, add it here)*
-![Gold Search Simulator Output](demo.png)
+<img width="859" height="424" alt="image" src="https://github.com/user-attachments/assets/2c3ffc08-bee2-4ddf-8926-558228888855" />
+
