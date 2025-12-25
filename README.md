@@ -29,6 +29,8 @@ According to the project documentation, the performance of these algorithms was 
 - **Logic**: Custom implementation of Search Algorithms
 
 ### 🖼 Project Demo
-*(After uploading your screenshot, add it here)*
+
 <img width="859" height="424" alt="image" src="https://github.com/user-attachments/assets/2c3ffc08-bee2-4ddf-8926-558228888855" />
+<img width="963" height="563" alt="image" src="https://github.com/user-attachments/assets/6d6e0854-973a-4462-9152-de371c8ac3a5" />
+<img width="959" height="516" alt="image" src="https://github.com/user-attachments/assets/265f01a5-0016-4b7e-a1ad-f92670640972" />
 
