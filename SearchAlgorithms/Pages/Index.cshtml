@@ -1,0 +1,350 @@
+﻿@page
+@model GoldSearchWebApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "Gold Search Simulator"; // Page title in browser tab
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 mb-5 bg-white rounded elegant-card">
+        <h1 class="text-center mb-4 text-primary">💰 Gold Search Simulator 🚶</h1>
+        <p class="text-center text-muted">
+            Welcome to the world of gold search! Enter coordinates and find the best path.
+            <br />
+            **Important: Grid dimensions and all coordinates (Row X and Column Y) start from 0.**
+            <br />
+            For example, in a 5x5 grid, rows and columns are numbered from **0 to 4**.
+        </p>
+
+        <form method="post" asp-page-handler="Search">
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6 col-lg-5 mb-3 form-group-box">
+                    <label asp-for="GridSize" class="form-label fw-bold text-info">Grid Size (e.g., 7):</label>
+                    <input asp-for="GridSize" class="form-control" type="number" min="1" max="20" aria-describedby="gridSizeHelp" />
+                    <div id="gridSizeHelp" class="form-text">A number between 1 and 20. (X*X grid dimensions)</div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6 col-lg-5 mb-3 form-group-box">
+                    <label asp-for="PlayerCoordsInput" class="form-label fw-bold text-success">Player Start Coords (Row X Col Y):</label>
+                    <input asp-for="PlayerCoordsInput" class="form-control" placeholder="e.g., 0 0" aria-describedby="playerCoordsHelp" />
+                    <div id="playerCoordsHelp" class="form-text">
+                        **X and Y start from 0.** Example: `0 0` (top-left cell)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-3">
+                <div class="col-md-6 col-lg-5 mb-3 form-group-box">
+                    <label asp-for="GoldCoordsInput" class="form-label fw-bold text-warning">Gold Source Coords (Row X Col Y):</label>
+                    <input asp-for="GoldCoordsInput" class="form-control" placeholder="e.g., 4 4" aria-describedby="goldCoordsHelp" />
+                    <div id="goldCoordsHelp" class="form-text">
+                        **X and Y start from 0.** Example: `4 4` (bottom-right cell in a 5x5 grid)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-6 col-lg-5 mb-3 form-group-box">
+                    <label asp-for="ObstaclesInput" class="form-label fw-bold text-danger">Obstacle Coords (comma-separated):</label>
+                    <input asp-for="ObstaclesInput" class="form-control" placeholder="e.g., 1 1, 1 2, 2 2" aria-describedby="obstaclesHelp" />
+                    <div id="obstaclesHelp" class="form-text">
+                        Leave blank to add none. Coordinates separated by comma, then space.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-6 col-lg-5 form-group-box">
+                    <label for="algorithmSelect" class="form-label fw-bold text-primary">Select Search Algorithm:</label>
+                    <select id="algorithmSelect" asp-for="SelectedAlgorithm" class="form-select">
+                        <option value="">Choose an Algorithm</option>
+                        <option value="BFS">BFS (Breadth-First Search)</option>
+                        <option value="DFS">DFS (Depth-First Search)</option>
+                        <option value="UCS">UCS (Uniform Cost Search)</option>
+                        <option value="AStar">A* (A-Star Search)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg custom-button">
+                    <i class="bi bi-search"></i> Start Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.ShowResultSection)
+    {
+        <hr class="my-5 elegant-hr" />
+        <div class="card shadow-lg p-4 mb-5 bg-white rounded elegant-card">
+            <h2 class="text-center mb-4 text-secondary">Search Results</h2>
+            <div class="alert @(Model.PathFound != null ? "alert-success" : "alert-warning") text-center result-alert" role="alert">
+                <strong>@Model.ResultMessage</strong>
+            </div>
+
+            @if (Model.PathFound != null && Model.PathFound.Any())
+            {
+                <h4 class="mt-4 text-center text-dark">
+                    Exact Path Taken: <span class="badge bg-primary path-steps-badge">(@Model.StepsCount Steps)</span>
+                </h4>
+                <div class="path-display text-center p-3 border rounded bg-light mx-auto my-3">
+                    @foreach (var cell in Model.PathFound)
+                    {
+                        <span class="path-coord badge bg-info text-white">(@cell.X,@cell.Y)</span>
+                        if (cell != Model.PathFound.Last())
+                        {
+                            <span class="path-arrow">&#8594;</span>
+                        }
+                    }
+                </div>
+            }
+
+            <h4 class="mt-4 text-center text-dark">Grid Display:</h4>
+            <div class="grid-container mx-auto p-2 my-3" style="grid-template-columns: repeat(@Model.CurrentGrid.Size, 50px);">
+                @for (int i = 0; i < Model.CurrentGrid.Size; i++)
+                {
+                    for (int j = 0; j < Model.CurrentGrid.Size; j++)
+                    {
+                        var cell = Model.CurrentGrid.Cells[i, j];
+                        var cellClass = "grid-cell";
+                        var cellContent = "";
+
+                        if (cell.IsPlayer)
+                        {
+                            cellClass += " player-cell";
+                            cellContent = "🚶"; // Player icon
+                        }
+                        else if (cell.IsGold)
+                        {
+                            cellClass += " gold-cell";
+                            cellContent = "💰"; // Gold icon
+                        }
+                        else if (cell.IsObstacle)
+                        {
+                            cellClass += " obstacle-cell";
+                            cellContent = "🧱"; // Obstacle icon
+                        }
+                        // Display path dots, excluding the start cell (which is 'P')
+                        else if (Model.PathFound != null && Model.PathFound.Contains(cell) && !(cell.X == Model.CurrentGrid.PlayerStart.X && cell.Y == Model.CurrentGrid.PlayerStart.Y))
+                        {
+                            cellClass += " path-cell";
+                            cellContent = "•"; // Path dot
+                        }
+                        else
+                        {
+                            cellContent = "."; // Empty cell
+                        }
+
+                        <div class="@cellClass" title="(@cell.X, @cell.Y)">
+                            @cellContent
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* Custom CSS for a more attractive appearance */
+    body {
+        background-color: #e0f2f7; /* Soft light blue background */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .elegant-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Deeper shadow for elegance */
+    }
+
+    .form-group-box {
+        max-width: 450px; /* Max width for input groups */
+        width: 100%; /* Ensure it takes full width within its column */
+    }
+
+    .form-label {
+        font-size: 0.95em;
+        margin-bottom: 0.3em;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 0.6em 0.75em;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+    .custom-button {
+        background-image: linear-gradient(to right, #4CAF50 0%, #66bb6a 51%, #4CAF50 100%);
+        padding: 15px 45px;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Softer blue shadow */
+        border-radius: 30px; /* Pill-shaped button */
+        border: none;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+        .custom-button:hover {
+            background-position: right center;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-2px); /* Slight lift on hover */
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+    .elegant-hr {
+        border-top: 2px dashed #a0d4e7; /* Dotted line for separation */
+        width: 60%; /* Shorter horizontal rule */
+        margin: 3rem auto; /* Centered */
+    }
+
+    .result-alert {
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 1.1em;
+    }
+
+    .path-steps-badge {
+        font-size: 1em;
+        padding: 0.5em 0.8em;
+        border-radius: 15px;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-gap: 4px; /* Slightly larger gap */
+        background-color: #f7fcff; /* Very light blue background */
+        border-radius: 12px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.15); /* More pronounced inner shadow */
+        padding: 12px;
+        width: fit-content;
+        border: 1px solid #d4eaf7; /* Soft border */
+    }
+
+    .grid-cell {
+        width: 50px; /* Slightly larger cells */
+        height: 50px;
+        border: 1px solid #b3e0ff; /* Lighter, soft blue border */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em; /* Larger icon size */
+        font-weight: bold;
+        border-radius: 10px; /* More rounded corners */
+        background-color: #e6f7ff; /* Softest blue background */
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.08); /* More noticeable shadow */
+    }
+
+        .grid-cell:hover {
+            transform: translateY(-3px); /* More pronounced lift on hover */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Stronger shadow on hover */
+            background-color: #d0efff; /* Slightly darker on hover */
+        }
+
+    .player-cell {
+        background-color: #c9f7c9; /* Softer green */
+        border-color: #88d488;
+        animation: pulsePlayer 1.8s infinite ease-in-out; /* Slower, smoother pulse */
+    }
+
+    .gold-cell {
+        background-color: #ffe6a5; /* Softer gold */
+        border-color: #ffda6a;
+        animation: bounceGold 1.2s infinite alternate ease-in-out; /* Slower, smoother bounce */
+    }
+
+    .obstacle-cell {
+        background-color: #6c757d; /* Deeper gray */
+        border-color: #495057;
+        color: white;
+        font-size: 1.8em; /* Slightly larger obstacle icon */
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .path-cell {
+        background-color: #a7d9f7; /* A more vibrant sky blue */
+        border-color: #64b5f6;
+        font-size: 2.2em; /* Larger path dot */
+        color: #1a1a1a; /* Darker dot for contrast */
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .path-display {
+        background-color: #f0f8ff; /* Lighter background for path display */
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* More space between elements */
+    }
+
+    .path-coord {
+        font-size: 1em;
+        padding: 9px 15px;
+        border-radius: 25px; /* More rounded */
+        background-color: #007bff !important;
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    .path-arrow {
+        font-size: 1.5em; /* Larger arrow */
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    /* Keyframe Animations */
+    keyframes pulsePlayer {
+        0%
+
+    {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.03);
+        opacity: 0.95;
+    }
+    /* Less drastic pulse */
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    }
+
+    keyframes bounceGold {
+        0%
+
+    {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-7px);
+    }
+    /* Slightly higher bounce */
+    }
+</style>
